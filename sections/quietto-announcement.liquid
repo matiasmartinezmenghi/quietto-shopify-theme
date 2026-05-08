@@ -1,0 +1,288 @@
+{% comment %}
+  quietto-announcement.liquid
+  Sección #1 del template de homepage Quietto.
+  Announcement bar con rotación de mensajes de confianza.
+  Sin urgencia falsa, sin preventa, sin countdown.
+  Estrategia: trust signals rápidos antes del hero.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 -%}
+
+<style>
+  .q-ann {
+    background-color: {{ section.settings.background_color | default: '#9DB6A4' }};
+    color: {{ section.settings.text_color | default: '#ffffff' }};
+    font-family: var(--q-font-body);
+    font-size: var(--q-text-sm);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    padding: 10px var(--q-space-6);
+    position: relative;
+    z-index: 10;
+  }
+
+  .q-ann__inner {
+    max-width: var(--q-max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+    position: relative;
+  }
+
+  .q-ann__messages {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .q-ann__message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    line-height: 1.4;
+  }
+
+  .q-ann__message.is-active {
+    opacity: 1;
+    position: relative;
+    pointer-events: auto;
+  }
+
+  .q-ann__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.45;
+    flex-shrink: 0;
+  }
+
+  {% if section.settings.show_dots and section.blocks.size > 1 %}
+  .q-ann__dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    right: 0;
+  }
+
+  .q-ann__dot-nav {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.3;
+    flex-shrink: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+
+  .q-ann__dot-nav.is-active {
+    opacity: 0.9;
+  }
+  {% endif %}
+</style>
+
+<div
+  class="q-ann"
+  id="quietto-announcement"
+  role="region"
+  aria-label="Información de la tienda"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-ann__inner">
+
+    <div class="q-ann__messages" id="q-ann-messages">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.message != blank -%}
+          <div
+            class="q-ann__message{% if forloop.first %} is-active{% endif %}"
+            data-index="{{ forloop.index0 }}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.icon != blank -%}
+              <span aria-hidden="true">{{ block.settings.icon }}</span>
+              <span class="q-ann__dot" aria-hidden="true"></span>
+            {%- endif -%}
+            <span>{{ block.settings.message }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_dots and section.blocks.size > 1 -%}
+      <div class="q-ann__dots" aria-hidden="true">
+        {%- for block in section.blocks -%}
+          <button
+            class="q-ann__dot-nav{% if forloop.first %} is-active{% endif %}"
+            data-target="{{ forloop.index0 }}"
+            tabindex="-1"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{%- if section.blocks.size > 1 -%}
+<script>
+(function () {
+  var wrapper = document.getElementById('q-ann-messages');
+  if (!wrapper) return;
+
+  var messages = wrapper.querySelectorAll('.q-ann__message');
+  if (messages.length <= 1) return;
+
+  var dots = document.querySelectorAll('#quietto-announcement .q-ann__dot-nav');
+  var current = 0;
+  var interval = {{ section.settings.rotation_speed | default: 3500 }};
+
+  function goTo(index) {
+    messages[current].classList.remove('is-active');
+    if (dots.length) dots[current].classList.remove('is-active');
+    current = index;
+    messages[current].classList.add('is-active');
+    if (dots.length) dots[current].classList.add('is-active');
+  }
+
+  var timer = setInterval(function () {
+    goTo((current + 1) % messages.length);
+  }, interval);
+
+  if (dots.length) {
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () {
+        clearInterval(timer);
+        goTo(i);
+        timer = setInterval(function () {
+          goTo((current + 1) % messages.length);
+        }, interval);
+      });
+    });
+  }
+})();
+</script>
+{%- endif -%}
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Quietto — Announcement",
+  "tag": "div",
+  "class": "quietto-announcement-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Estilo"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#9DB6A4",
+      "info": "Verde salvia por defecto. Usar colores de marca Quietto."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Rotación"
+    },
+    {
+      "type": "range",
+      "id": "rotation_speed",
+      "label": "Velocidad de rotación (ms)",
+      "min": 2000,
+      "max": 6000,
+      "step": 500,
+      "default": 3500,
+      "info": "Tiempo entre mensajes en milisegundos. 3500 recomendado."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Mostrar indicadores de posición",
+      "default": false,
+      "info": "Puntos pequeños que indican el mensaje activo."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Mensaje",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Ícono (emoji)",
+          "placeholder": "Ej: 🚚",
+          "info": "Opcional. Usar un emoji simple y claro."
+        },
+        {
+          "type": "text",
+          "id": "message",
+          "label": "Mensaje",
+          "placeholder": "Ej: Envíos a toda Argentina",
+          "info": "Mantener corto — máximo 50 caracteres para mobile."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Announcement",
+      "blocks": [
+        {
+          "type": "message",
+          "settings": {
+            "icon": "🚚",
+            "message": "Envíos a toda Argentina"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "icon": "🛡️",
+            "message": "30 días de garantía"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "icon": "💬",
+            "message": "Atención personalizada por WhatsApp"
+          }
+        },
+        {
+          "type": "message",
+          "settings": {
+            "icon": "🎓",
+            "message": "Pack Convivencia con guía incluida"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
