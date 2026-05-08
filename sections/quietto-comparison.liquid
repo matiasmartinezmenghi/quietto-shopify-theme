@@ -1,0 +1,482 @@
+{% comment %}
+  quietto-comparison.liquid
+  Sección #6 del template de homepage Quietto.
+  Comparativa honesta: Adiestrador / Collar de descarga / Quietto.
+  Honesta, no agresiva. No dice que el adiestrador no sirve.
+  No dice que el collar siempre lastima.
+  Dice que Quietto es una alternativa menos invasiva de apoyo.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md secciones 7 y 11.
+  Estrategia: venta directa. Sin preventa. Sin claims absolutos.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Wrapper con indicador de scroll en mobile */
+  .q-comparison-wrapper {
+    position: relative;
+  }
+
+  /* Fade derecho en mobile para indicar scroll */
+  @media (max-width: 749px) {
+    .q-comparison-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 32px;
+      background: linear-gradient(to right, transparent, var(--q-white));
+      pointer-events: none;
+      border-radius: 0 var(--q-radius-lg) var(--q-radius-lg) 0;
+    }
+  }
+
+  /* Hint de scroll — solo mobile */
+  .q-comparison-hint {
+    display: none;
+    text-align: center;
+    font-size: var(--q-text-xs);
+    color: var(--q-charcoal-soft);
+    margin-bottom: var(--q-space-3);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 749px) {
+    .q-comparison-hint { display: block; }
+  }
+
+  /* Nombre de columna no-quietto */
+  .q-comparison-table th.q-col--alt {
+    background-color: var(--q-cream-dark);
+    color: var(--q-charcoal);
+    font-size: var(--q-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Primera columna (etiquetas de fila) */
+  .q-comparison-table th.q-col--label,
+  .q-comparison-table td.q-col--label {
+    text-align: left;
+    color: var(--q-charcoal);
+    font-weight: 500;
+    font-size: var(--q-text-sm);
+    min-width: 140px;
+    background-color: var(--q-cream);
+  }
+
+  .q-comparison-table th.q-col--label {
+    font-size: var(--q-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--q-charcoal-soft);
+    background-color: var(--q-cream);
+  }
+
+  /* Filas alternas para legibilidad */
+  .q-comparison-table tbody tr:nth-child(even) td {
+    background-color: rgba(245, 241, 234, 0.5);
+  }
+
+  .q-comparison-table tbody tr:nth-child(even) td.q-col--quietto {
+    background-color: rgba(201, 125, 93, 0.07);
+  }
+
+  /* Celda de texto valor */
+  .q-comparison-table td {
+    font-size: var(--q-text-sm);
+    line-height: 1.4;
+  }
+
+  /* Disclaimer al pie */
+  .q-comparison__disclaimer {
+    margin-top: var(--q-space-6);
+    padding: var(--q-space-4) var(--q-space-5);
+    background-color: var(--q-cream-dark);
+    border-radius: var(--q-radius-md);
+    border-left: 3px solid var(--q-sage);
+    font-size: var(--q-text-sm);
+    color: var(--q-charcoal-soft);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* Ícono en cabecera de columna Quietto */
+  .q-comparison-table th.q-col--quietto .q-col-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--q-space-1);
+  }
+
+  .q-comparison-table th.q-col--quietto .q-col-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background-color: rgba(255,255,255,0.25);
+    border-radius: var(--q-radius-full);
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+</style>
+
+<section
+  class="quietto-section q-section q-section--white q-comparison"
+  id="quietto-comparison"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+
+    {%- comment -%} ENCABEZADO {%- endcomment -%}
+    <div class="q-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="q-heading q-heading--section">
+        {{ section.settings.headline | default: 'Una alternativa simple antes de llegar a métodos extremos' }}
+      </h2>
+
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="max-width: 640px; margin: 0 auto;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} TABLA COMPARATIVA {%- endcomment -%}
+    <p class="q-comparison-hint" aria-hidden="true">← Deslizá para ver toda la tabla →</p>
+
+    <div class="q-comparison-wrapper">
+      <div class="q-comparison" style="border-radius: var(--q-radius-lg); border: 1px solid var(--q-border);">
+        <table class="q-comparison-table">
+          <thead>
+            <tr>
+              <th class="q-col--label" scope="col">
+                {{- section.settings.row_label_header | default: '' -}}
+              </th>
+              <th class="q-col--alt" scope="col">
+                {{- section.settings.col1_name | default: 'Adiestrador profesional' -}}
+              </th>
+              <th class="q-col--alt" scope="col">
+                {{- section.settings.col2_name | default: 'Collar de descarga' -}}
+              </th>
+              <th class="q-col--quietto" scope="col">
+                <div class="q-col-header">
+                  <span>{{- section.settings.col3_name | default: 'Quietto' -}}</span>
+                  {%- if section.settings.col3_badge != blank -%}
+                    <span class="q-col-badge">{{ section.settings.col3_badge }}</span>
+                  {%- endif -%}
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'row' -%}
+                <tr {{ block.shopify_attributes }}>
+                  <td class="q-col--label" scope="row">
+                    {{ block.settings.label }}
+                  </td>
+
+                  {%- comment -%} Columna 1 — Adiestrador {%- endcomment -%}
+                  <td>
+                    {%- case block.settings.col1_type -%}
+                      {%- when 'check' -%}
+                        <span class="q-check" aria-label="Sí">✓</span>
+                        {%- if block.settings.col1_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col1_value }}</span>
+                        {%- endif -%}
+                      {%- when 'cross' -%}
+                        <span class="q-cross" aria-label="No">—</span>
+                        {%- if block.settings.col1_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col1_value }}</span>
+                        {%- endif -%}
+                      {%- else -%}
+                        {{ block.settings.col1_value }}
+                    {%- endcase -%}
+                  </td>
+
+                  {%- comment -%} Columna 2 — Collar {%- endcomment -%}
+                  <td>
+                    {%- case block.settings.col2_type -%}
+                      {%- when 'check' -%}
+                        <span class="q-check" aria-label="Sí">✓</span>
+                        {%- if block.settings.col2_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col2_value }}</span>
+                        {%- endif -%}
+                      {%- when 'cross' -%}
+                        <span class="q-cross" aria-label="No">—</span>
+                        {%- if block.settings.col2_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col2_value }}</span>
+                        {%- endif -%}
+                      {%- else -%}
+                        {{ block.settings.col2_value }}
+                    {%- endcase -%}
+                  </td>
+
+                  {%- comment -%} Columna 3 — Quietto (destacada) {%- endcomment -%}
+                  <td class="q-col--quietto">
+                    {%- case block.settings.col3_type -%}
+                      {%- when 'check' -%}
+                        <span class="q-check" aria-label="Sí">✓</span>
+                        {%- if block.settings.col3_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col3_value }}</span>
+                        {%- endif -%}
+                      {%- when 'cross' -%}
+                        <span class="q-cross" aria-label="No">—</span>
+                        {%- if block.settings.col3_value != blank -%}
+                          &nbsp;<span>{{ block.settings.col3_value }}</span>
+                        {%- endif -%}
+                      {%- else -%}
+                        {{ block.settings.col3_value }}
+                    {%- endcase -%}
+                  </td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {%- comment -%} DISCLAIMER AL PIE {%- endcomment -%}
+    {%- if section.settings.disclaimer != blank -%}
+      <p class="q-comparison__disclaimer">
+        {{ section.settings.disclaimer }}
+      </p>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — Comparativa",
+  "tag": "section",
+  "class": "quietto-comparison-section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "placeholder": "Ej: Comparativa honesta"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título",
+      "default": "Una alternativa simple antes de llegar a métodos extremos"
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "Quietto no reemplaza la educación ni a un profesional. Es una herramienta de apoyo para empezar a corregir hábitos de forma más simple y respetuosa."
+    },
+    {
+      "type": "header",
+      "content": "Columnas de la tabla"
+    },
+    {
+      "type": "text",
+      "id": "row_label_header",
+      "label": "Encabezado de la columna de etiquetas",
+      "placeholder": "Ej: Criterio",
+      "info": "Puede dejarse vacío."
+    },
+    {
+      "type": "text",
+      "id": "col1_name",
+      "label": "Nombre columna 1",
+      "default": "Adiestrador profesional"
+    },
+    {
+      "type": "text",
+      "id": "col2_name",
+      "label": "Nombre columna 2",
+      "default": "Collar de descarga"
+    },
+    {
+      "type": "text",
+      "id": "col3_name",
+      "label": "Nombre columna 3 (Quietto — destacada)",
+      "default": "Quietto"
+    },
+    {
+      "type": "text",
+      "id": "col3_badge",
+      "label": "Badge bajo el nombre de Quietto",
+      "default": "Recomendado",
+      "info": "Ej: Recomendado / Nuestra elección. Dejar vacío para ocultar."
+    },
+    {
+      "type": "header",
+      "content": "Pie de tabla"
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer",
+      "label": "Texto aclaratorio al pie",
+      "default": "Para casos de agresividad severa o problemas complejos, siempre recomendamos consultar con un profesional. Quietto es una herramienta de apoyo para hábitos cotidianos.",
+      "info": "Aparece con borde verde salvia. Refuerza honestidad de marca."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Fila comparativa",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Etiqueta de la fila",
+          "placeholder": "Ej: Costo inicial"
+        },
+        {
+          "type": "header",
+          "content": "Columna 1 — Adiestrador"
+        },
+        {
+          "type": "select",
+          "id": "col1_type",
+          "label": "Tipo de celda",
+          "options": [
+            { "value": "text",  "label": "Texto" },
+            { "value": "check", "label": "Check (✓)" },
+            { "value": "cross", "label": "Dash (—)" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "col1_value",
+          "label": "Valor",
+          "placeholder": "Ej: $200.000+"
+        },
+        {
+          "type": "header",
+          "content": "Columna 2 — Collar"
+        },
+        {
+          "type": "select",
+          "id": "col2_type",
+          "label": "Tipo de celda",
+          "options": [
+            { "value": "text",  "label": "Texto" },
+            { "value": "check", "label": "Check (✓)" },
+            { "value": "cross", "label": "Dash (—)" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "col2_value",
+          "label": "Valor",
+          "placeholder": "Ej: Se coloca en el perro"
+        },
+        {
+          "type": "header",
+          "content": "Columna 3 — Quietto"
+        },
+        {
+          "type": "select",
+          "id": "col3_type",
+          "label": "Tipo de celda",
+          "options": [
+            { "value": "text",  "label": "Texto" },
+            { "value": "check", "label": "Check (✓)" },
+            { "value": "cross", "label": "Dash (—)" }
+          ],
+          "default": "text"
+        },
+        {
+          "type": "text",
+          "id": "col3_value",
+          "label": "Valor",
+          "placeholder": "Ej: Sin collar"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Comparativa",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "label": "Costo inicial",
+            "col1_type": "text", "col1_value": "$150.000 – $300.000+",
+            "col2_type": "text", "col2_value": "$20.000 – $80.000",
+            "col3_type": "text", "col3_value": "$35.000 – $59.900"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Requiere colocar algo en el perro",
+            "col1_type": "cross", "col1_value": "",
+            "col2_type": "text",  "col2_value": "Sí — collar",
+            "col3_type": "check", "col3_value": "No"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Uso diario",
+            "col1_type": "text", "col1_value": "Por sesiones con agenda",
+            "col2_type": "text", "col2_value": "Constante en el perro",
+            "col3_type": "text", "col3_value": "A demanda, cuando lo necesitás"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Contacto físico con el perro",
+            "col1_type": "cross", "col1_value": "",
+            "col2_type": "text",  "col2_value": "Sí — collar en contacto",
+            "col3_type": "check", "col3_value": "No — uso a distancia"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Método / guía incluida",
+            "col1_type": "check", "col1_value": "Sí — profesional presencial",
+            "col2_type": "cross", "col2_value": "",
+            "col3_type": "check", "col3_value": "Sí — guía de 7 días incluida"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Requiere agenda o turnos",
+            "col1_type": "text",  "col1_value": "Sí",
+            "col2_type": "cross", "col2_value": "",
+            "col3_type": "check", "col3_value": "No"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "label": "Garantía de devolución",
+            "col1_type": "cross", "col1_value": "",
+            "col2_type": "cross", "col2_value": "",
+            "col3_type": "check", "col3_value": "30 días sin preguntas"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
