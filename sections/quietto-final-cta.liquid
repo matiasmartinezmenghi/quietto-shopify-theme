@@ -1,0 +1,241 @@
+{% comment %}
+  quietto-final-cta.liquid
+  Sección #12 del template de homepage Quietto.
+  Cierre de landing: CTA principal al bundle + CTA WhatsApp + garantía.
+  Estrategia: venta directa. Sin preventa. Sin reserva. Sin importación.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md sección 11.
+  Fondo configurable: cream-dark (default) o carbón (dark mode).
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Variante oscura */
+  .q-final-cta--dark {
+    background-color: var(--q-charcoal);
+  }
+
+  .q-final-cta--dark .q-heading,
+  .q-final-cta--dark .q-heading--section {
+    color: var(--q-white);
+  }
+
+  .q-final-cta--dark .q-subhead {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .q-final-cta--dark .q-label {
+    color: var(--q-sage);
+  }
+
+  .q-final-cta--dark .q-final-cta__microcopy {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .q-final-cta--dark .q-final-cta__legal {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* Microcopy con separadores */
+  .q-final-cta__microcopy {
+    font-size: var(--q-text-xs);
+    color: var(--q-charcoal-soft);
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+
+  /* Nota legal */
+  .q-final-cta__legal {
+    font-size: var(--q-text-xs);
+    color: var(--q-charcoal-soft);
+    font-style: italic;
+    max-width: 480px;
+    line-height: 1.6;
+    text-align: center;
+  }
+</style>
+
+{%- assign bg_style = section.settings.background_style | default: 'cream' -%}
+
+<section
+  class="quietto-section q-section q-final-cta{% if bg_style == 'charcoal' %} q-final-cta--dark{% endif %}"
+  id="quietto-final-cta"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+    <div class="q-final-cta__inner">
+
+      {%- comment -%} EYEBROW {%- endcomment -%}
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- comment -%} TÍTULO {%- endcomment -%}
+      <h2 class="q-heading q-heading--section" style="margin: 0;">
+        {{ section.settings.headline | default: '¿Listo para probar una forma más simple de entrenar?' }}
+      </h2>
+
+      {%- comment -%} SUBTÍTULO {%- endcomment -%}
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="margin: 0;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+
+      {%- comment -%} BOTONES {%- endcomment -%}
+      <div class="q-final-cta__actions">
+
+        {%- comment -%} CTA principal → #quietto-bundle {%- endcomment -%}
+        {%- if section.settings.cta_primary_text != blank -%}
+          <a
+            href="{{ section.settings.cta_primary_url | default: '#quietto-bundle' }}"
+            class="q-btn q-btn--primary q-btn--lg"
+          >
+            {{ section.settings.cta_primary_text }}
+          </a>
+        {%- endif -%}
+
+        {%- comment -%} CTA secundario → WhatsApp {%- endcomment -%}
+        {%- if section.settings.cta_secondary_text != blank -%}
+          {%- assign wa_url = section.settings.whatsapp_url -%}
+          <a
+            href="{{ wa_url | default: '#' }}"
+            class="q-btn q-btn--whatsapp q-btn--lg"
+            {%- if wa_url != blank %} target="_blank" rel="noopener noreferrer"{%- endif -%}
+            aria-label="{{ section.settings.cta_secondary_text }}"
+          >
+            {%- comment -%} Ícono WhatsApp SVG {%- endcomment -%}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0;">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            {{ section.settings.cta_secondary_text }}
+          </a>
+        {%- endif -%}
+
+      </div>
+
+      {%- comment -%} MICROCOPY {%- endcomment -%}
+      {%- if section.settings.microcopy != blank -%}
+        <p class="q-final-cta__microcopy">{{ section.settings.microcopy }}</p>
+      {%- endif -%}
+
+      {%- comment -%} NOTA LEGAL {%- endcomment -%}
+      {%- if section.settings.legal_note != blank -%}
+        <p class="q-final-cta__legal">{{ section.settings.legal_note }}</p>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — CTA final",
+  "tag": "section",
+  "class": "quietto-final-cta-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Estilo de fondo"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Color de fondo",
+      "options": [
+        { "value": "cream",    "label": "Crema cálido (claro)" },
+        { "value": "charcoal", "label": "Carbón cálido (oscuro)" }
+      ],
+      "default": "cream",
+      "info": "El modo oscuro invierte los colores de texto automáticamente."
+    },
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "placeholder": "Ej: Empezá hoy"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título",
+      "default": "¿Listo para probar una forma más simple de entrenar?"
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "Quietto te ayuda a trabajar ladridos y malos hábitos sin collar, sin golpes y sin descarga. Probalo 30 días y escribinos por WhatsApp si necesitás ayuda."
+    },
+    {
+      "type": "header",
+      "content": "CTA principal"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_text",
+      "label": "Texto del botón principal",
+      "default": "Ver Pack Convivencia"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_url",
+      "label": "Link del botón principal",
+      "info": "Dejar vacío para apuntar a #quietto-bundle (anchor en la misma página)."
+    },
+    {
+      "type": "header",
+      "content": "CTA WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_text",
+      "label": "Texto del botón WhatsApp",
+      "default": "Hablar por WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_url",
+      "label": "URL de WhatsApp",
+      "info": "Ej: https://wa.me/5491XXXXXXXXX — REEMPLAZAR antes de lanzar. Dejar vacío desactiva el link externo."
+    },
+    {
+      "type": "header",
+      "content": "Microcopy y legal"
+    },
+    {
+      "type": "text",
+      "id": "microcopy",
+      "label": "Microcopy bajo los botones",
+      "default": "Compra directa · 30 días para probarlo · Atención humana por WhatsApp"
+    },
+    {
+      "type": "textarea",
+      "id": "legal_note",
+      "label": "Nota legal (opcional)",
+      "default": "Quietto es una herramienta de apoyo para entrenamiento. En casos complejos, recomendamos consultar con un profesional.",
+      "info": "Texto en itálica pequeña. Dejar vacío para ocultar."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — CTA final",
+      "settings": {
+        "background_style": "cream",
+        "eyebrow": "",
+        "headline": "¿Listo para probar una forma más simple de entrenar?",
+        "subhead": "Quietto te ayuda a trabajar ladridos y malos hábitos sin collar, sin golpes y sin descarga. Probalo 30 días y escribinos por WhatsApp si necesitás ayuda.",
+        "cta_primary_text": "Ver Pack Convivencia",
+        "cta_secondary_text": "Hablar por WhatsApp",
+        "whatsapp_url": "",
+        "microcopy": "Compra directa · 30 días para probarlo · Atención humana por WhatsApp",
+        "legal_note": "Quietto es una herramienta de apoyo para entrenamiento. En casos complejos, recomendamos consultar con un profesional."
+      }
+    }
+  ]
+}
+{% endschema %}
