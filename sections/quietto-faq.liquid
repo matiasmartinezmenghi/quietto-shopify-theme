@@ -1,0 +1,335 @@
+{% comment %}
+  quietto-faq.liquid
+  Sección #11 del template de homepage Quietto.
+  Acordeón honesto — reduce objeciones antes del CTA final.
+  JS: IIFE vanilla, ~30 líneas, sin dependencias externas.
+  Toggle via clase .q-faq__item--open (definida en quietto-custom.css).
+  Estrategia: venta directa. Sin preventa. Sin importación. Sin reserva.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md sección 11.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Pie de sección: texto + CTA WhatsApp */
+  .q-faq__footer {
+    margin-top: var(--q-space-10);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--q-space-4);
+  }
+
+  .q-faq__footer-text {
+    font-size: var(--q-text-base);
+    color: var(--q-charcoal-soft);
+    line-height: 1.6;
+    max-width: 500px;
+  }
+</style>
+
+<section
+  class="quietto-section q-section q-faq"
+  id="quietto-faq"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+
+    {%- comment -%} ENCABEZADO {%- endcomment -%}
+    <div class="q-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="q-heading q-heading--section">
+        {{ section.settings.headline | default: 'Preguntas frecuentes' }}
+      </h2>
+
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="max-width: 580px; margin: 0 auto;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ACORDEÓN {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="q-faq__list"
+        id="q-faq-{{ section.id }}"
+        data-open-first="{{ section.settings.open_first }}"
+      >
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq_item' -%}
+            <div
+              class="q-faq__item"
+              {{ block.shopify_attributes }}
+            >
+              <button
+                class="q-faq__question"
+                aria-expanded="false"
+                aria-controls="q-faq-ans-{{ block.id }}"
+                type="button"
+              >
+                {{ block.settings.question }}
+                {%- comment -%} Ícono + que rota 45° → × al abrir {%- endcomment -%}
+                <svg
+                  class="q-faq__icon"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </button>
+
+              <div
+                class="q-faq__answer"
+                id="q-faq-ans-{{ block.id }}"
+                role="region"
+              >
+                {%- if block.settings.answer != blank -%}
+                  {{ block.settings.answer | newline_to_br }}
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} PIE: texto + CTA WhatsApp {%- endcomment -%}
+    {%- if section.settings.footer_text != blank or section.settings.cta_text != blank -%}
+      <div class="q-faq__footer">
+        {%- if section.settings.footer_text != blank -%}
+          <p class="q-faq__footer-text">{{ section.settings.footer_text }}</p>
+        {%- endif -%}
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_url | default: '#' }}"
+            class="q-btn q-btn--secondary"
+            {%- if section.settings.cta_url contains 'wa.me' %} target="_blank" rel="noopener noreferrer"{%- endif -%}
+          >
+            {{ section.settings.cta_text }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- comment -%}
+  JS: IIFE vanilla — sin dependencias externas.
+  Toggle .q-faq__item--open + aria-expanded.
+  Comportamiento acordeón: cierra el anterior al abrir uno nuevo.
+  data-open-first="true" abre el primer item en carga inicial.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+<script>
+(function () {
+  var list = document.getElementById('q-faq-{{ section.id }}');
+  if (!list) return;
+
+  var items = list.querySelectorAll('.q-faq__item');
+  if (!items.length) return;
+
+  function openItem(item) {
+    item.classList.add('q-faq__item--open');
+    var btn = item.querySelector('.q-faq__question');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeItem(item) {
+    item.classList.remove('q-faq__item--open');
+    var btn = item.querySelector('.q-faq__question');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+
+  if (list.dataset.openFirst === 'true') {
+    openItem(items[0]);
+  }
+
+  items.forEach(function (item) {
+    var btn = item.querySelector('.q-faq__question');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var isOpen = item.classList.contains('q-faq__item--open');
+      items.forEach(closeItem);
+      if (!isOpen) openItem(item);
+    });
+  });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Quietto — FAQ",
+  "tag": "section",
+  "class": "quietto-faq-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "placeholder": "Ej: Tus dudas, respondidas"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título",
+      "default": "Preguntas frecuentes"
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "Respuestas claras antes de comprar. Sin promesas mágicas, sin letra chica."
+    },
+    {
+      "type": "header",
+      "content": "Comportamiento"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Abrir primera pregunta por defecto",
+      "default": false,
+      "info": "Si está activado, la primera pregunta aparece expandida al cargar la página."
+    },
+    {
+      "type": "header",
+      "content": "Pie de sección"
+    },
+    {
+      "type": "textarea",
+      "id": "footer_text",
+      "label": "Texto al pie",
+      "default": "Si tu caso es más específico, escribinos por WhatsApp y te orientamos antes de comprar.",
+      "info": "Aparece centrado bajo el acordeón. Dejar vacío para ocultar."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del CTA (opcional)",
+      "placeholder": "Ej: Escribinos por WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Link del CTA",
+      "info": "Ej: https://wa.me/5491XXXXXXXXX — Dejar vacío si no se usa."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Pregunta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta",
+          "info": "Escribir como la haría un cliente real. Sin lenguaje técnico."
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Respuesta",
+          "info": "Sin claims absolutos. Sin prometer resultados garantizados. Sin decir que funciona en todos los perros."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — FAQ",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Le hace daño a mi perro?",
+            "answer": "No. Quietto no usa descarga eléctrica ni contacto físico. Emite una señal ultrasónica pensada para llamar la atención del perro y ayudarte a redirigir la conducta. Debe usarse con responsabilidad y acompañado de entrenamiento."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Tiene descarga eléctrica?",
+            "answer": "No. Quietto no es un collar y no emite descargas. Es un dispositivo de mano que funciona con ultrasonido."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Funciona en todos los perros?",
+            "answer": "No podemos prometer eso. La respuesta puede variar según edad, sensibilidad, temperamento y constancia de uso. Por eso tenés 30 días para probarlo."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Es para perros chicos o grandes?",
+            "answer": "Puede usarse en perros chicos, medianos y grandes. En perros muy jóvenes, mayores o con pérdida auditiva, la respuesta puede variar."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Cuánto tarda en verse un cambio?",
+            "answer": "Algunos perros reaccionan desde los primeros usos, otros necesitan varios días de repetición y refuerzo positivo. La guía de 7 días te ayuda a usarlo correctamente."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Reemplaza a un adiestrador?",
+            "answer": "No. Quietto es una herramienta de apoyo para hábitos cotidianos. En casos de agresividad severa, ansiedad intensa o problemas complejos, recomendamos consultar con un profesional."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Qué pasa si no funciona con mi perro?",
+            "answer": "Tenés 30 días para probarlo. Si no es para vos, podés solicitar la devolución según la política de garantía."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Funciona en perros sordos o muy mayores?",
+            "answer": "Si el perro tiene pérdida auditiva importante, puede no responder al ultrasonido. En esos casos, la guía de entrenamiento puede servirte, pero el dispositivo puede no ser adecuado."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Cuándo me llega?",
+            "answer": "Las opciones y tiempos de envío se muestran al momento de la compra según tu ubicación."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "¿Cómo me contacto si tengo dudas?",
+            "answer": "Podés escribirnos por WhatsApp y te ayudamos con compra, uso del producto o garantía."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
