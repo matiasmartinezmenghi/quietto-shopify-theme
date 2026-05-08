@@ -1,0 +1,815 @@
+/* ==========================================================================
+   QUIETTO CUSTOM CSS
+   Capa visual propia de Quietto — no modifica base.css ni el tema Atelier.
+   Todas las clases usan prefijo .q- o .quietto- para evitar colisiones.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. GOOGLE FONTS
+   Fraunces (headlines serif) + Inter (cuerpo)
+   -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600&display=swap');
+
+
+/* --------------------------------------------------------------------------
+   2. VARIABLES CSS — PALETA QUIETTO
+   -------------------------------------------------------------------------- */
+:root {
+  /* Paleta de colores */
+  --q-cream:       #F5F1EA;
+  --q-sage:        #9DB6A4;
+  --q-terracotta:  #C97D5D;
+  --q-charcoal:    #2A2A2A;
+  --q-sky:         #7B97B5;
+
+  /* Derivados */
+  --q-terracotta-hover:  #b56d4e;
+  --q-sage-hover:        #87a08e;
+  --q-cream-dark:        #EDE8DF;
+  --q-charcoal-soft:     #4A4A4A;
+  --q-border:            #DDD8CE;
+  --q-white:             #FFFFFF;
+
+  /* Tipografía */
+  --q-font-heading: 'Fraunces', Georgia, serif;
+  --q-font-body:    'Inter', system-ui, sans-serif;
+
+  /* Tamaños de fuente — mobile first */
+  --q-text-xs:   0.75rem;   /* 12px */
+  --q-text-sm:   0.875rem;  /* 14px */
+  --q-text-base: 1rem;      /* 16px */
+  --q-text-lg:   1.125rem;  /* 18px */
+  --q-text-xl:   1.25rem;   /* 20px */
+  --q-text-2xl:  1.5rem;    /* 24px */
+  --q-text-3xl:  1.875rem;  /* 30px */
+  --q-text-4xl:  2.25rem;   /* 36px */
+  --q-text-5xl:  3rem;      /* 48px */
+
+  /* Espaciado */
+  --q-space-1:  0.25rem;
+  --q-space-2:  0.5rem;
+  --q-space-3:  0.75rem;
+  --q-space-4:  1rem;
+  --q-space-5:  1.25rem;
+  --q-space-6:  1.5rem;
+  --q-space-8:  2rem;
+  --q-space-10: 2.5rem;
+  --q-space-12: 3rem;
+  --q-space-16: 4rem;
+  --q-space-20: 5rem;
+  --q-space-24: 6rem;
+
+  /* Border radius */
+  --q-radius-sm:   4px;
+  --q-radius-md:   8px;
+  --q-radius-lg:   12px;
+  --q-radius-xl:   16px;
+  --q-radius-full: 9999px;
+
+  /* Sombras */
+  --q-shadow-sm:  0 1px 3px rgba(42, 42, 42, 0.08);
+  --q-shadow-md:  0 4px 12px rgba(42, 42, 42, 0.10);
+  --q-shadow-lg:  0 8px 24px rgba(42, 42, 42, 0.12);
+
+  /* Transiciones */
+  --q-transition: 200ms ease;
+  --q-transition-slow: 350ms ease;
+
+  /* Layout */
+  --q-max-width:        1200px;
+  --q-section-padding:  var(--q-space-16) var(--q-space-6);
+}
+
+@media (min-width: 750px) {
+  :root {
+    --q-section-padding: var(--q-space-20) var(--q-space-8);
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --q-section-padding: var(--q-space-24) var(--q-space-8);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   3. RESET BASE QUIETTO
+   -------------------------------------------------------------------------- */
+.quietto-section {
+  box-sizing: border-box;
+  font-family: var(--q-font-body);
+  color: var(--q-charcoal);
+  background-color: var(--q-cream);
+}
+
+.quietto-section *,
+.quietto-section *::before,
+.quietto-section *::after {
+  box-sizing: inherit;
+}
+
+.quietto-section img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* --------------------------------------------------------------------------
+   4. TIPOGRAFÍA
+   -------------------------------------------------------------------------- */
+.q-heading {
+  font-family: var(--q-font-heading);
+  font-weight: 600;
+  color: var(--q-charcoal);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.q-heading--hero {
+  font-size: var(--q-text-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.q-heading--section {
+  font-size: var(--q-text-2xl);
+  font-weight: 600;
+}
+
+.q-heading--card {
+  font-size: var(--q-text-xl);
+  font-weight: 600;
+}
+
+.q-subhead {
+  font-family: var(--q-font-body);
+  font-size: var(--q-text-base);
+  color: var(--q-charcoal-soft);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.q-label {
+  font-family: var(--q-font-body);
+  font-size: var(--q-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--q-charcoal-soft);
+}
+
+@media (min-width: 750px) {
+  .q-heading--hero    { font-size: var(--q-text-5xl); }
+  .q-heading--section { font-size: var(--q-text-3xl); }
+  .q-heading--card    { font-size: var(--q-text-2xl); }
+  .q-subhead          { font-size: var(--q-text-lg); }
+}
+
+
+/* --------------------------------------------------------------------------
+   5. BOTONES
+   -------------------------------------------------------------------------- */
+
+/* Base compartida */
+.q-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--q-space-2);
+  font-family: var(--q-font-body);
+  font-size: var(--q-text-base);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--q-radius-md);
+  padding: var(--q-space-4) var(--q-space-8);
+  cursor: pointer;
+  transition: background-color var(--q-transition),
+              border-color var(--q-transition),
+              color var(--q-transition),
+              transform var(--q-transition);
+  white-space: nowrap;
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.q-btn:active {
+  transform: scale(0.98);
+}
+
+/* CTA principal — terracota */
+.q-btn--primary {
+  background-color: var(--q-terracotta);
+  border-color: var(--q-terracotta);
+  color: var(--q-white);
+}
+
+.q-btn--primary:hover {
+  background-color: var(--q-terracotta-hover);
+  border-color: var(--q-terracotta-hover);
+  color: var(--q-white);
+}
+
+/* Botón secundario — sage outline */
+.q-btn--secondary {
+  background-color: transparent;
+  border-color: var(--q-sage);
+  color: var(--q-sage);
+}
+
+.q-btn--secondary:hover {
+  background-color: var(--q-sage);
+  color: var(--q-white);
+}
+
+/* Botón ghost — outline charcoal */
+.q-btn--ghost {
+  background-color: transparent;
+  border-color: var(--q-charcoal);
+  color: var(--q-charcoal);
+}
+
+.q-btn--ghost:hover {
+  background-color: var(--q-charcoal);
+  color: var(--q-white);
+}
+
+/* Tamaños */
+.q-btn--lg {
+  font-size: var(--q-text-lg);
+  padding: var(--q-space-5) var(--q-space-10);
+  min-height: 60px;
+}
+
+.q-btn--sm {
+  font-size: var(--q-text-sm);
+  padding: var(--q-space-3) var(--q-space-6);
+  min-height: 40px;
+}
+
+/* Full width (mobile) */
+.q-btn--full {
+  width: 100%;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. BADGES
+   -------------------------------------------------------------------------- */
+.q-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--q-font-body);
+  font-size: var(--q-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: var(--q-space-1) var(--q-space-3);
+  border-radius: var(--q-radius-full);
+  line-height: 1.4;
+}
+
+.q-badge--popular {
+  background-color: var(--q-terracotta);
+  color: var(--q-white);
+}
+
+.q-badge--free {
+  background-color: var(--q-sage);
+  color: var(--q-white);
+}
+
+.q-badge--guarantee {
+  background-color: var(--q-cream-dark);
+  color: var(--q-charcoal);
+  border: 1px solid var(--q-border);
+}
+
+.q-badge--new {
+  background-color: var(--q-sky);
+  color: var(--q-white);
+}
+
+
+/* --------------------------------------------------------------------------
+   7. CARDS
+   -------------------------------------------------------------------------- */
+.q-card {
+  background-color: var(--q-white);
+  border: 1.5px solid var(--q-border);
+  border-radius: var(--q-radius-lg);
+  padding: var(--q-space-6);
+  transition: box-shadow var(--q-transition), border-color var(--q-transition);
+}
+
+.q-card:hover {
+  box-shadow: var(--q-shadow-md);
+}
+
+/* Card destacada (Pack 2) */
+.q-card--featured {
+  border-color: var(--q-terracotta);
+  border-width: 2px;
+  position: relative;
+}
+
+.q-card--featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(201, 125, 93, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Card de trust/beneficio */
+.q-card--trust {
+  background-color: var(--q-cream);
+  border-color: var(--q-cream-dark);
+  text-align: center;
+  padding: var(--q-space-8) var(--q-space-6);
+}
+
+/* Card de testimonio */
+.q-card--testimonial {
+  background-color: var(--q-white);
+  border-color: var(--q-border);
+  border-radius: var(--q-radius-lg);
+  padding: var(--q-space-6);
+}
+
+
+/* --------------------------------------------------------------------------
+   8. BUNDLE PICKER
+   -------------------------------------------------------------------------- */
+.q-bundle-picker {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--q-space-4);
+  width: 100%;
+}
+
+@media (min-width: 750px) {
+  .q-bundle-picker {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--q-space-6);
+  }
+}
+
+.q-bundle-card {
+  background-color: var(--q-white);
+  border: 2px solid var(--q-border);
+  border-radius: var(--q-radius-xl);
+  padding: var(--q-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--q-space-4);
+  transition: border-color var(--q-transition), box-shadow var(--q-transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.q-bundle-card:hover {
+  border-color: var(--q-terracotta);
+  box-shadow: var(--q-shadow-md);
+}
+
+/* Pack 2 — destacado por defecto */
+.q-bundle-card--featured {
+  border-color: var(--q-terracotta);
+  box-shadow: var(--q-shadow-lg);
+}
+
+.q-bundle-card__badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.q-bundle-card__title {
+  font-family: var(--q-font-heading);
+  font-size: var(--q-text-xl);
+  font-weight: 700;
+  color: var(--q-charcoal);
+  margin: 0;
+}
+
+.q-bundle-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--q-space-2);
+  flex-wrap: wrap;
+}
+
+.q-bundle-card__price-main {
+  font-family: var(--q-font-heading);
+  font-size: var(--q-text-3xl);
+  font-weight: 700;
+  color: var(--q-charcoal);
+}
+
+.q-bundle-card__price-original {
+  font-size: var(--q-text-base);
+  color: var(--q-charcoal-soft);
+  text-decoration: line-through;
+}
+
+.q-bundle-card__price-savings {
+  font-size: var(--q-text-sm);
+  font-weight: 600;
+  color: var(--q-terracotta);
+}
+
+.q-bundle-card__includes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--q-space-2);
+}
+
+.q-bundle-card__includes li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--q-space-2);
+  font-size: var(--q-text-sm);
+  color: var(--q-charcoal-soft);
+  line-height: 1.5;
+}
+
+.q-bundle-card__includes li::before {
+  content: '✓';
+  color: var(--q-sage);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.q-bundle-card__cta {
+  margin-top: auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   9. TRUST BAR
+   -------------------------------------------------------------------------- */
+.q-trust-bar {
+  background-color: var(--q-cream-dark);
+  border-top: 1px solid var(--q-border);
+  border-bottom: 1px solid var(--q-border);
+  padding: var(--q-space-5) var(--q-space-6);
+}
+
+.q-trust-bar__inner {
+  max-width: var(--q-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--q-space-6) var(--q-space-8);
+}
+
+.q-trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--q-space-2);
+  font-size: var(--q-text-sm);
+  font-weight: 500;
+  color: var(--q-charcoal);
+  white-space: nowrap;
+}
+
+.q-trust-item__icon {
+  font-size: var(--q-text-lg);
+  flex-shrink: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   10. HERO
+   -------------------------------------------------------------------------- */
+.q-hero {
+  position: relative;
+  background-color: var(--q-cream);
+  overflow: hidden;
+}
+
+.q-hero__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: var(--q-cream-dark);
+  overflow: hidden;
+}
+
+@media (min-width: 750px) {
+  .q-hero__media {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.q-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.q-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(42, 42, 42, 0.65) 0%,
+    rgba(42, 42, 42, 0.20) 50%,
+    transparent 100%
+  );
+}
+
+.q-hero__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--q-space-10) var(--q-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--q-space-4);
+}
+
+@media (min-width: 750px) {
+  .q-hero__content {
+    max-width: 640px;
+    padding: var(--q-space-16) var(--q-space-12);
+  }
+}
+
+.q-hero__headline {
+  font-family: var(--q-font-heading);
+  font-size: var(--q-text-3xl);
+  font-weight: 700;
+  color: var(--q-white);
+  line-height: 1.1;
+  margin: 0;
+}
+
+@media (min-width: 750px) {
+  .q-hero__headline {
+    font-size: var(--q-text-5xl);
+  }
+}
+
+.q-hero__subhead {
+  font-size: var(--q-text-base);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+@media (min-width: 750px) {
+  .q-hero__subhead {
+    font-size: var(--q-text-lg);
+  }
+}
+
+.q-hero__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--q-space-3);
+  margin-top: var(--q-space-2);
+}
+
+@media (min-width: 480px) {
+  .q-hero__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.q-hero__guarantee {
+  display: flex;
+  align-items: center;
+  gap: var(--q-space-2);
+  font-size: var(--q-text-xs);
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: var(--q-space-2);
+}
+
+
+/* --------------------------------------------------------------------------
+   11. STICKY CTA MOBILE
+   -------------------------------------------------------------------------- */
+.q-sticky-cta {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background-color: var(--q-white);
+  border-top: 1px solid var(--q-border);
+  padding: var(--q-space-3) var(--q-space-4);
+  box-shadow: 0 -4px 16px rgba(42, 42, 42, 0.10);
+}
+
+@media (max-width: 749px) {
+  .q-sticky-cta {
+    display: block;
+  }
+}
+
+.q-sticky-cta__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--q-space-3);
+}
+
+.q-sticky-cta__text {
+  flex: 1;
+  font-size: var(--q-text-sm);
+  color: var(--q-charcoal-soft);
+  line-height: 1.3;
+}
+
+.q-sticky-cta__text strong {
+  display: block;
+  color: var(--q-charcoal);
+  font-weight: 600;
+}
+
+.q-sticky-cta.is-hidden {
+  display: none !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   12. SECTION WRAPPER GENÉRICO
+   -------------------------------------------------------------------------- */
+.q-section {
+  padding: var(--q-section-padding);
+  width: 100%;
+}
+
+.q-section--cream    { background-color: var(--q-cream); }
+.q-section--white    { background-color: var(--q-white); }
+.q-section--cream-dark { background-color: var(--q-cream-dark); }
+.q-section--charcoal {
+  background-color: var(--q-charcoal);
+  color: var(--q-white);
+}
+
+.q-container {
+  max-width: var(--q-max-width);
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 var(--q-space-6);
+}
+
+@media (min-width: 1200px) {
+  .q-container {
+    padding: 0 var(--q-space-8);
+  }
+}
+
+.q-section__header {
+  text-align: center;
+  margin-bottom: var(--q-space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--q-space-3);
+}
+
+@media (min-width: 750px) {
+  .q-section__header {
+    margin-bottom: var(--q-space-16);
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   13. SEPARADOR / DIVIDER
+   -------------------------------------------------------------------------- */
+.q-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--q-border);
+  border: none;
+  margin: 0;
+}
+
+.q-divider--thick {
+  height: 2px;
+  background-color: var(--q-terracotta);
+  width: 48px;
+  margin: 0 auto;
+}
+
+
+/* --------------------------------------------------------------------------
+   14. ÍCONOS INLINE SVG — helpers de tamaño
+   -------------------------------------------------------------------------- */
+.q-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.q-icon--sm { width: 20px; height: 20px; }
+.q-icon--md { width: 28px; height: 28px; }
+.q-icon--lg { width: 40px; height: 40px; }
+.q-icon--xl { width: 56px; height: 56px; }
+
+
+/* --------------------------------------------------------------------------
+   15. STAR RATING
+   -------------------------------------------------------------------------- */
+.q-stars {
+  display: inline-flex;
+  gap: 2px;
+  color: #E8A020;
+  font-size: var(--q-text-base);
+  line-height: 1;
+}
+
+.q-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--q-space-2);
+}
+
+.q-rating__count {
+  font-size: var(--q-text-sm);
+  color: var(--q-charcoal-soft);
+}
+
+
+/* --------------------------------------------------------------------------
+   16. PLACEHOLDER DE IMAGEN
+   Visible en desarrollo, oculto en producción con imagen real.
+   -------------------------------------------------------------------------- */
+.q-img-placeholder {
+  background-color: var(--q-cream-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--q-text-sm);
+  color: var(--q-charcoal-soft);
+  font-family: var(--q-font-body);
+  border: 2px dashed var(--q-border);
+  border-radius: var(--q-radius-md);
+  min-height: 200px;
+  text-align: center;
+  padding: var(--q-space-4);
+}
+
+
+/* --------------------------------------------------------------------------
+   17. UTILIDADES
+   -------------------------------------------------------------------------- */
+
+/* Visibilidad */
+.q-hide-mobile  { display: none !important; }
+.q-hide-desktop { display: block; }
+
+@media (min-width: 750px) {
+  .q-hide-mobile  { display: block !important; }
+  .q-hide-desktop { display: none !important; }
+}
+
+/* Texto */
+.q-text-center { text-align: center; }
+.q-text-left   { text-align: left; }
+
+/* Flex helpers */
+.q-flex         { display: flex; }
+.q-flex-col     { flex-direction: column; }
+.q-flex-center  { align-items: center; justify-content: center; }
+.q-flex-between { justify-content: space-between; }
+.q-gap-2  { gap: var(--q-space-2); }
+.q-gap-4  { gap: var(--q-space-4); }
+.q-gap-6  { gap: var(--q-space-6); }
+.q-gap-8  { gap: var(--q-space-8); }
+
+/* Espaciado de sección */
+.q-mt-8  { margin-top: var(--q-space-8); }
+.q-mt-12 { margin-top: var(--q-space-12); }
+.q-mb-8  { margin-bottom: var(--q-space-8); }
+.q-mb-12 { margin-bottom: var(--q-space-12); }
+
+/* Animaciones suaves */
+.q-fade-in {
+  animation: qFadeIn 0.4s ease forwards;
+}
+
+@keyframes qFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
