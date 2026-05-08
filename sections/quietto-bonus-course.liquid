@@ -1,0 +1,349 @@
+{% comment %}
+  quietto-bonus-course.liquid
+  Sección #8 del template de homepage Quietto.
+  Muestra el valor de la guía digital de 7 días incluida con el Pack Convivencia.
+  Refuerza: Quietto = herramienta + método. No solo un dispositivo.
+  Lenguaje seguro: guía, método simple, rutina práctica. No "curso profesional".
+  Sin preventa, sin importación, sin promesas garantizadas.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md sección 11.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Título de cada día */
+  .q-course__day-title {
+    font-weight: 600;
+    color: var(--q-charcoal);
+    flex: 1;
+  }
+
+  /* Descripción opcional del día */
+  .q-course__day-desc {
+    font-size: var(--q-text-xs);
+    color: var(--q-charcoal-soft);
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  /* Wrapper texto + número dentro del día */
+  .q-course__day-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+
+  /* Badge "Incluida en el Pack Convivencia" */
+  .q-course__pack-note {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--q-space-2);
+    font-size: var(--q-text-xs);
+    font-weight: 600;
+    color: var(--q-sage);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--q-space-1);
+  }
+
+  /* Disclaimer al pie */
+  .q-course__disclaimer {
+    font-size: var(--q-text-xs);
+    color: var(--q-charcoal-soft);
+    font-style: italic;
+    line-height: 1.6;
+    margin-top: var(--q-space-2);
+  }
+
+  /* CTA suave — link con flecha */
+  .q-course__cta-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--q-space-3);
+    flex-wrap: wrap;
+  }
+</style>
+
+<section
+  class="quietto-section q-section q-course"
+  id="quietto-bonus-course"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+
+    {%- comment -%} ENCABEZADO {%- endcomment -%}
+    <div class="q-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="q-heading q-heading--section">
+        {{ section.settings.headline | default: 'El método de 7 días que viene con tu Quietto.' }}
+      </h2>
+
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="max-width: 620px; margin: 0 auto;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} LAYOUT: contenido izquierda + media derecha {%- endcomment -%}
+    <div class="q-course__layout">
+
+      {%- comment -%} COLUMNA CONTENIDO {%- endcomment -%}
+      <div class="q-course__content">
+
+        {%- comment -%} Badge de pack {%- endcomment -%}
+        {%- if section.settings.pack_note != blank -%}
+          <p class="q-course__pack-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2L4 5.5V10c0 5.25 3.6 9.7 8 11 4.4-1.3 8-5.75 8-11V5.5L12 2z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            {{ section.settings.pack_note }}
+          </p>
+        {%- endif -%}
+
+        {%- comment -%} LISTA DE DÍAS {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <ul class="q-course__days" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'day' -%}
+                <li
+                  class="q-course__day"
+                  {{ block.shopify_attributes }}
+                >
+                  <span class="q-course__day-num" aria-label="Día {{ block.settings.day_number }}">
+                    D{{ block.settings.day_number | default: forloop.index }}
+                  </span>
+                  <div class="q-course__day-body">
+                    {%- if block.settings.title != blank -%}
+                      <span class="q-course__day-title">{{ block.settings.title }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <span class="q-course__day-desc">{{ block.settings.description }}</span>
+                    {%- endif -%}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- comment -%} CTA SUAVE + DISCLAIMER {%- endcomment -%}
+        <div style="display: flex; flex-direction: column; gap: var(--q-space-3);">
+
+          <div class="q-course__cta-wrap">
+            {%- if section.settings.cta_text != blank -%}
+              <a
+                href="{{ section.settings.cta_url | default: '#quietto-bundle' }}"
+                class="q-btn q-btn--secondary"
+              >
+                {{ section.settings.cta_text }}
+              </a>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.disclaimer != blank -%}
+            <p class="q-course__disclaimer">{{ section.settings.disclaimer }}</p>
+          {%- endif -%}
+
+        </div>
+
+      </div>
+
+      {%- comment -%} MEDIA LATERAL {%- endcomment -%}
+      <div class="q-course__media">
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 640
+            | image_tag:
+              loading: 'lazy',
+              widths: '320, 480, 640',
+              sizes: '(min-width: 750px) 280px, 90vw',
+              alt: section.settings.image.alt | default: 'Guía Quietto — método de 7 días'
+          }}
+        {%- else -%}
+          {%- comment -%}
+            PLACEHOLDER: quietto-course-preview.jpg
+            Sugerencia: mockup de la guía digital (PDF o pantalla de video).
+            Fondo crema, dispositivo en mano o captura de pantalla de la guía.
+            Mínimo 640px de ancho.
+          {%- endcomment -%}
+          <div class="q-img-placeholder" style="height: 100%; border-radius: 0; border: none;">
+            📖 quietto-course-preview.jpg
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — Guía 7 días",
+  "tag": "section",
+  "class": "quietto-bonus-course-section",
+  "max_blocks": 7,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "placeholder": "Ej: Método incluido",
+      "info": "Opcional. Aparece en mayúsculas sobre el título."
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título",
+      "default": "El método de 7 días que viene con tu Quietto."
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "El dispositivo es la herramienta. La guía te muestra cómo usarla bien para trabajar ladridos, saltos y malos hábitos con constancia."
+    },
+    {
+      "type": "text",
+      "id": "pack_note",
+      "label": "Nota de pack (badge verde)",
+      "default": "Incluida en el Pack Convivencia",
+      "info": "Aparece con ícono de escudo en verde salvia. Dejar vacío para ocultar."
+    },
+    {
+      "type": "header",
+      "content": "Media lateral"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen o mockup de la guía",
+      "info": "Reemplazar placeholder con mockup real de la guía o captura de pantalla. Proporción 3:4 recomendada."
+    },
+    {
+      "type": "header",
+      "content": "CTA y pie"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del CTA",
+      "default": "Ver Pack Convivencia"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Link del CTA",
+      "info": "Dejar vacío para apuntar a #quietto-bundle (anchor en la misma página)."
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer",
+      "label": "Aclaración al pie",
+      "default": "La guía no reemplaza a un adiestrador profesional. Es un acompañamiento básico para ayudarte a usar Quietto de forma responsable.",
+      "info": "Texto en itálica pequeña. Refuerza honestidad de marca."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "day",
+      "name": "Día",
+      "settings": [
+        {
+          "type": "text",
+          "id": "day_number",
+          "label": "Número del día",
+          "placeholder": "1",
+          "info": "Si se deja vacío usa el orden automático del bloque."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título del día",
+          "info": "Corto y accionable. Máximo 8 palabras."
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Descripción (opcional)",
+          "info": "1 línea extra de contexto. Dejar vacío si el título ya es suficiente."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Guía 7 días",
+      "blocks": [
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "1",
+            "title": "Cómo presentarle Quietto a tu perro.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "2",
+            "title": "Cuándo usarlo y cuándo no.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "3",
+            "title": "Cómo reforzar la conducta correcta.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "4",
+            "title": "Ladridos por timbre, vecinos o ruidos.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "5",
+            "title": "Saltos sobre visitas y ansiedad al recibir gente.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "6",
+            "title": "Paseos, tirones y reactividad.",
+            "description": ""
+          }
+        },
+        {
+          "type": "day",
+          "settings": {
+            "day_number": "7",
+            "title": "Rutina de mantenimiento para no volver atrás.",
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
