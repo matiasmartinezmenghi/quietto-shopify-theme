@@ -1,0 +1,253 @@
+{% comment %}
+  quietto-problem.liquid
+  Sección #3 del template de homepage Quietto.
+  Dolores principales del cliente — identificación emocional antes de la solución.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md sección 11.
+  Estrategia: problema → identificación → tensión → transición a solución.
+  Sin preventa, sin estadísticas inventadas, sin claims absolutos.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .q-problem__number {
+    font-family: var(--q-font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--q-terracotta);
+    opacity: 0.25;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .q-problem__item-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--q-space-2);
+    flex: 1;
+  }
+
+  .q-problem__item-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .q-problem__transition {
+    margin-top: var(--q-space-10);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--q-space-4);
+  }
+
+  @media (min-width: 750px) {
+    .q-problem__transition {
+      margin-top: var(--q-space-16);
+    }
+  }
+
+  .q-problem__transition-line {
+    width: 40px;
+    height: 2px;
+    background-color: var(--q-terracotta);
+    border-radius: 2px;
+    opacity: 0.6;
+  }
+
+  .q-problem__transition-text {
+    font-family: var(--q-font-body);
+    font-size: var(--q-text-base);
+    color: var(--q-charcoal-soft);
+    line-height: 1.65;
+    max-width: 560px;
+  }
+
+  @media (min-width: 750px) {
+    .q-problem__transition-text {
+      font-size: var(--q-text-lg);
+    }
+  }
+
+  .q-problem__transition-text strong {
+    color: var(--q-charcoal);
+    font-weight: 600;
+  }
+</style>
+
+<section
+  class="quietto-section q-section q-section--cream-dark q-problem"
+  id="quietto-problem"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+
+    {%- comment -%} ENCABEZADO {%- endcomment -%}
+    <div class="q-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="q-heading q-heading--section">
+        {{ section.settings.headline | default: 'Si llegaste hasta acá, probablemente esto ya lo viviste.' }}
+      </h2>
+
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="max-width: 580px; margin: 0 auto;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} GRID DE DOLORES {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="q-problem__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'problem_card' -%}
+            <div
+              class="q-problem__item"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.emoji != blank or block.settings.show_number -%}
+                <div style="display: flex; align-items: center; gap: var(--q-space-3);">
+                  {%- if block.settings.show_number -%}
+                    <span class="q-problem__number" aria-hidden="true">
+                      {{ forloop.index | prepend: '0' | slice: -2, 2 }}
+                    </span>
+                  {%- endif -%}
+                  {%- if block.settings.emoji != blank -%}
+                    <span class="q-problem__item-emoji" aria-hidden="true">
+                      {{ block.settings.emoji }}
+                    </span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+              <div class="q-problem__item-body">
+                <p class="q-problem__item-text">
+                  {{ block.settings.text | default: '' }}
+                </p>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} TRANSICIÓN A SOLUCIÓN {%- endcomment -%}
+    {%- if section.settings.transition_text != blank -%}
+      <div class="q-problem__transition">
+        <div class="q-problem__transition-line" aria-hidden="true"></div>
+        <p class="q-problem__transition-text">
+          {{ section.settings.transition_text }}
+        </p>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — Problema",
+  "tag": "section",
+  "class": "quietto-problem-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (texto pequeño sobre el título)",
+      "placeholder": "Ej: ¿Te identificás?",
+      "info": "Opcional. Aparece en mayúsculas sobre el headline."
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título de la sección",
+      "default": "Si llegaste hasta acá, probablemente esto ya lo viviste."
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "No es que no ames a tu perro. Es que a veces necesitás una herramienta para recuperar calma en casa y afuera."
+    },
+    {
+      "type": "header",
+      "content": "Transición a solución"
+    },
+    {
+      "type": "textarea",
+      "id": "transition_text",
+      "label": "Texto de transición (al pie de la sección)",
+      "default": "Quietto está pensado para ayudarte a interrumpir esas conductas sin gritos, sin golpes y sin descarga.",
+      "info": "Aparece centrado con una línea terracota decorativa. Conecta visualmente con la sección siguiente."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "problem_card",
+      "name": "Dolor / Problema",
+      "settings": [
+        {
+          "type": "text",
+          "id": "emoji",
+          "label": "Ícono (emoji)",
+          "placeholder": "Ej: 🐕",
+          "info": "Opcional. Mantener neutro y empático — no usar íconos de enojo."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_number",
+          "label": "Mostrar número de orden (01, 02, 03)",
+          "default": false,
+          "info": "Número grande en terracota con baja opacidad. Efecto decorativo."
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto del problema",
+          "info": "Usar primera o segunda persona. Empático, no culposo. Máximo 2 líneas."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Problema",
+      "blocks": [
+        {
+          "type": "problem_card",
+          "settings": {
+            "emoji": "🐕",
+            "show_number": false,
+            "text": "Tu perro ladra y no sabés cómo controlarlo sin gritarle."
+          }
+        },
+        {
+          "type": "problem_card",
+          "settings": {
+            "emoji": "🏢",
+            "show_number": false,
+            "text": "Tus vecinos te miran raro cada vez que entrás al edificio."
+          }
+        },
+        {
+          "type": "problem_card",
+          "settings": {
+            "emoji": "🦮",
+            "show_number": false,
+            "text": "Cada paseo es una lucha y ya no querés sacarlo."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
