@@ -1,0 +1,169 @@
+{% comment %}
+  quietto-hero.liquid
+  Sección #2 del template de homepage Quietto.
+  Hero principal: headline + subhead + CTAs + imagen de fondo.
+  Copy extraído textualmente del QUIETTO_MASTER_BRIEF.md sección 11.
+  Estrategia: venta directa. Sin referencias a preventa.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="quietto-section q-hero"
+  id="quietto-hero"
+  {{ section.shopify_attributes }}
+>
+
+  {%- comment -%} MEDIA DE FONDO {%- endcomment -%}
+  <div class="q-hero__media">
+
+    {%- if section.settings.hero_image != blank -%}
+      {{
+        section.settings.hero_image
+        | image_url: width: 1200
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '375, 750, 1100, 1200',
+          sizes: '100vw',
+          alt: section.settings.hero_image.alt | default: 'Quietto — entrenador ultrasónico para perros'
+      }}
+    {%- else -%}
+      {%- comment -%} PLACEHOLDER: reemplazar con foto dog-owner-hero.jpg (dueña AR + perro real, luz natural) {%- endcomment -%}
+      <div class="q-img-placeholder" style="min-height: 100%; border-radius: 0; border: none;">
+        📸 dog-owner-hero.jpg
+      </div>
+    {%- endif -%}
+
+    <div class="q-hero__overlay"></div>
+  </div>
+
+  {%- comment -%} CONTENIDO SOBRE LA IMAGEN {%- endcomment -%}
+  <div class="q-hero__content">
+
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="q-label" style="color: rgba(255,255,255,0.8); margin: 0;">
+        {{- section.settings.eyebrow -}}
+      </p>
+    {%- endif -%}
+
+    <h1 class="q-hero__headline">
+      {{- section.settings.headline | default: 'Sin gritar. Sin pegarle. Sin shock.' -}}
+    </h1>
+
+    <p class="q-hero__subhead">
+      {{- section.settings.subhead | default: 'Una ayuda simple para corregir ladridos y malos hábitos. Con curso de 7 días incluido.' -}}
+    </p>
+
+    <div class="q-hero__actions">
+      <a
+        href="{{ section.settings.cta_primary_link | default: '#quietto-bundle' }}"
+        class="q-btn q-btn--primary q-btn--lg"
+      >
+        {{- section.settings.cta_primary_label | default: 'Llevátelo con el curso incluido' -}}
+      </a>
+
+      <a
+        href="{{ section.settings.cta_secondary_link | default: '#quietto-how-it-works' }}"
+        class="q-btn q-btn--ghost q-btn--lg"
+        style="border-color: rgba(255,255,255,0.6); color: #fff;"
+      >
+        {{- section.settings.cta_secondary_label | default: 'Ver cómo funciona' -}}
+      </a>
+    </div>
+
+    <div class="q-hero__guarantee">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 1L2 3.5V8c0 3.3 2.5 6.3 6 7 3.5-.7 6-3.7 6-7V3.5L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M5.5 8l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>{{- section.settings.guarantee_text | default: '30 días de garantía. Devolución total sin preguntas.' -}}</span>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — Hero",
+  "tag": "section",
+  "class": "quietto-hero-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Imagen de fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen de hero",
+      "info": "Usar dog-owner-hero.jpg. Mínimo 1200px de ancho. Luz natural, perro real argentino."
+    },
+    {
+      "type": "header",
+      "content": "Textos"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (texto pequeño sobre el headline)",
+      "placeholder": "Ej: Nuevo en Argentina"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline principal",
+      "default": "Sin gritar. Sin pegarle. Sin shock."
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subheadline",
+      "default": "Una ayuda simple para corregir ladridos y malos hábitos. Con curso de 7 días incluido."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Texto de garantía bajo los CTAs",
+      "default": "30 días de garantía. Devolución total sin preguntas."
+    },
+    {
+      "type": "header",
+      "content": "CTA Principal"
+    },
+    {
+      "type": "text",
+      "id": "cta_primary_label",
+      "label": "Texto del botón principal",
+      "default": "Llevátelo con el curso incluido"
+    },
+    {
+      "type": "url",
+      "id": "cta_primary_link",
+      "label": "Destino del botón principal",
+      "info": "Dejar vacío para anclar a #quietto-bundle"
+    },
+    {
+      "type": "header",
+      "content": "CTA Secundario"
+    },
+    {
+      "type": "text",
+      "id": "cta_secondary_label",
+      "label": "Texto del botón secundario",
+      "default": "Ver cómo funciona"
+    },
+    {
+      "type": "url",
+      "id": "cta_secondary_link",
+      "label": "Destino del botón secundario",
+      "info": "Dejar vacío para anclar a #quietto-how-it-works"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Hero"
+    }
+  ]
+}
+{% endschema %}
