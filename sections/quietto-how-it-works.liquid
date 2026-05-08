@@ -1,0 +1,284 @@
+{% comment %}
+  quietto-how-it-works.liquid
+  Sección #4 del template de homepage Quietto.
+  Explica el mecanismo en 3 pasos simples — post-problema, pre-beneficios.
+  Copy extraído del QUIETTO_MASTER_BRIEF.md sección 11.
+  Estrategia: venta directa. Sin preventa. Sin promesas absolutas.
+  No dice "funciona en todos los perros". No promete resultado inmediato.
+{% endcomment %}
+
+{{ 'quietto-custom.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .q-hiw__footer {
+    margin-top: var(--q-space-12);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--q-space-3);
+  }
+
+  @media (min-width: 750px) {
+    .q-hiw__footer {
+      margin-top: var(--q-space-16);
+    }
+  }
+
+  .q-hiw__footer-text {
+    font-family: var(--q-font-body);
+    font-size: var(--q-text-sm);
+    color: var(--q-charcoal-soft);
+    font-style: italic;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+
+  @media (min-width: 750px) {
+    .q-hiw__footer-text {
+      font-size: var(--q-text-base);
+    }
+  }
+
+  /* Conector vertical en mobile entre pasos */
+  @media (max-width: 749px) {
+    .q-step:not(:last-child) {
+      padding-bottom: var(--q-space-8);
+      position: relative;
+    }
+
+    .q-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 19px;
+      width: 2px;
+      height: var(--q-space-8);
+      background: linear-gradient(to bottom, var(--q-terracotta), transparent);
+      opacity: 0.3;
+    }
+  }
+
+  /* Texto del número de paso configurable */
+  .q-step__label {
+    font-family: var(--q-font-body);
+    font-size: var(--q-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--q-terracotta);
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>
+
+<section
+  class="quietto-section q-section q-section--white q-how-it-works"
+  id="quietto-how-it-works"
+  {{ section.shopify_attributes }}
+>
+  <div class="q-container">
+
+    {%- comment -%} ENCABEZADO {%- endcomment -%}
+    <div class="q-section__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="q-label">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      <h2 class="q-heading q-heading--section">
+        {{ section.settings.headline | default: 'Tres pasos. Una herramienta. Un método.' }}
+      </h2>
+
+      {%- if section.settings.subhead != blank -%}
+        <p class="q-subhead" style="max-width: 600px; margin: 0 auto;">
+          {{ section.settings.subhead }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} PASOS {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="q-steps">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            <div
+              class="q-step"
+              {{ block.shopify_attributes }}
+            >
+              {%- comment -%} NÚMERO DEL PASO {%- endcomment -%}
+              <div style="display: flex; align-items: center; gap: var(--q-space-3);">
+                <div class="q-step__number" aria-hidden="true">
+                  {{ block.settings.step_number | default: forloop.index }}
+                </div>
+                {%- if block.settings.step_label != blank -%}
+                  <p class="q-step__label">{{ block.settings.step_label }}</p>
+                {%- endif -%}
+              </div>
+
+              {%- comment -%} IMAGEN DEL PASO {%- endcomment -%}
+              <div class="q-step__media">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '375, 600, 800',
+                      sizes: '(min-width: 750px) 33vw, 100vw',
+                      alt: block.settings.image.alt | default: block.settings.title
+                  }}
+                {%- else -%}
+                  {%- comment -%}
+                    PLACEHOLDER: reemplazar con how-it-works-{{ forloop.index }}.jpg
+                    Foto en uso del dispositivo — luz natural, mano real sosteniendo Quietto.
+                  {%- endcomment -%}
+                  <div class="q-img-placeholder" style="min-height: 100%; border-radius: 0; border: none;">
+                    📸 how-it-works-{{ forloop.index }}.jpg
+                  </div>
+                {%- endif -%}
+              </div>
+
+              {%- comment -%} TEXTO DEL PASO {%- endcomment -%}
+              <div style="display: flex; flex-direction: column; gap: var(--q-space-2);">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="q-step__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+
+                {%- if block.settings.description != blank -%}
+                  <p class="q-step__desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} TEXTO FINAL OPCIONAL {%- endcomment -%}
+    {%- if section.settings.footer_text != blank -%}
+      <div class="q-hiw__footer">
+        <div class="q-divider--thick" aria-hidden="true"></div>
+        <p class="q-hiw__footer-text">{{ section.settings.footer_text }}</p>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Quietto — Cómo funciona",
+  "tag": "section",
+  "class": "quietto-how-it-works-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Encabezado"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow (texto sobre el título)",
+      "placeholder": "Ej: Así funciona",
+      "info": "Opcional. Aparece en mayúsculas sobre el headline."
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Título de la sección",
+      "default": "Tres pasos. Una herramienta. Un método."
+    },
+    {
+      "type": "textarea",
+      "id": "subhead",
+      "label": "Subtítulo",
+      "default": "No se trata de castigar a tu perro. Se trata de interrumpir la conducta y enseñarle qué hacer después."
+    },
+    {
+      "type": "header",
+      "content": "Cierre de sección"
+    },
+    {
+      "type": "textarea",
+      "id": "footer_text",
+      "label": "Texto al pie (opcional)",
+      "default": "Funciona mejor cuando lo usás con constancia y refuerzo positivo.",
+      "info": "Aparece centrado en itálica. Usar para honestidad calibrada — no promesas absolutas."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Paso",
+      "settings": [
+        {
+          "type": "text",
+          "id": "step_number",
+          "label": "Número del paso",
+          "placeholder": "1",
+          "info": "Si se deja vacío, usa el orden automático del bloque."
+        },
+        {
+          "type": "text",
+          "id": "step_label",
+          "label": "Etiqueta junto al número",
+          "placeholder": "Ej: Paso 1",
+          "info": "Opcional. Aparece en mayúsculas al lado del número circular."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen del paso",
+          "info": "Usar how-it-works-1.jpg / 2.jpg / 3.jpg. Mínimo 800px. Mostrar dispositivo en uso real."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título del paso"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripción del paso",
+          "info": "Máximo 2 líneas. Empático y claro. Sin tecnicismos."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quietto — Cómo funciona",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "1",
+            "step_label": "Paso 1",
+            "title": "Apretás el botón cuando aparece la conducta.",
+            "description": "Ladridos, saltos, reacción al timbre o tensión en el paseo."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "2",
+            "step_label": "Paso 2",
+            "title": "Tu perro escucha el ultrasonido.",
+            "description": "Es una señal pensada para llamar su atención. Sin collar, sin descarga y sin contacto físico."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "step_number": "3",
+            "step_label": "Paso 3",
+            "title": "Redirigís con una orden simple.",
+            "description": "Quietto pausa la conducta. El método te ayuda a reforzar la respuesta correcta."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
